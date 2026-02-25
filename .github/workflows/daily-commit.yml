@@ -1,0 +1,31 @@
+name: Daily Commit - 23f2004678@ds.study.iitm.ac.in
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write        # ← This fixes the push permission error
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.email "23f2004678@ds.study.iitm.ac.in"
+          git config user.name "23f2004678-arch"
+
+      - name: Create daily commit
+        run: |
+          echo "Daily update: $(date)" >> activity_log.txt
+          git add activity_log.txt
+          git commit -m "Daily automated commit - $(date)"
+          git push
